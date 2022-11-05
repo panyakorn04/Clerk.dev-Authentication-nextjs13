@@ -1,57 +1,45 @@
 import Image from 'next/image'
-import styles from './page.module.css'
+import {
+  auth, SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs/app-beta';
+import Link from 'next/link';
+import { currentUser } from '@clerk/nextjs/app-beta';
 
-export default function Home() {
+
+export default async function Home() {
+  const { userId } = auth();
+  const user = await currentUser();
+
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js 13!</a>
-        </h1>
+    <>
+      <header
+        className="flex justify-between items-center py-4 px-6 bg-gray-200 border-b-4"
+      >
+        <h1>My App</h1>
+        <SignedIn>
+          {/* Mount the UserButton component */}
+          <UserButton />
+        </SignedIn>
+        <SignedOut>
+          <Link href="/sign-in" className='hover:text-indigo-500'>
+            Sign In
+          </Link>
+        </SignedOut>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://beta.nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js 13</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Explore the Next.js 13 playground.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates/next.js/app-directory?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>Deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
+      </header>
+      <main>
+        <h1 className="text-4xl font-bold text-center my-8">Welcome {user?.firstName}{user?.lastName}</h1>
+        <div className="flex justify-center">
+          <Image
+            src="/images/nextjs.png"
+            alt="Next.js logo"
+            width={20}
+            height={20}
+          />
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
+    </>
   )
 }
