@@ -10,8 +10,9 @@ npm run dev
 yarn dev
 ```
 # Install the clerk/nextjs package 
+```bash
 npm install @clerk/nextjs
-
+```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
